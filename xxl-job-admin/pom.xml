@@ -59,11 +59,24 @@
 			<artifactId>mybatis-spring-boot-starter</artifactId>
 			<version>${mybatis-spring-boot-starter.version}</version>
 		</dependency>
+
 		<!-- mysql -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>${mysql-connector-java.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.opengauss</groupId>
+			<artifactId>opengauss-jdbc</artifactId>
+			<version>${opengauss-jdbc.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.dameng</groupId>
+			<artifactId>DmJdbcDriver18</artifactId>
+			<version>${dameng.version}</version>
 		</dependency>
 
 		<!-- xxl-job-core -->

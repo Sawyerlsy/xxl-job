@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xxl.job.admin.dao.XxlJobRegistryDao">
-	
+
 	<resultMap id="XxlJobRegistry" type="com.xxl.job.admin.core.model.XxlJobRegistry" >
 		<result column="id" property="id" />
 	    <result column="registry_group" property="registryGroup" />
@@ -20,11 +20,28 @@
 	</sql>
 
 	<select id="findDead" parameterType="java.util.HashMap" resultType="java.lang.Integer" >
-		SELECT t.id
-		FROM xxl_job_registry AS t
-		WHERE t.update_time <![CDATA[ < ]]> DATE_ADD(#{nowTime},INTERVAL -#{timeout} SECOND)
+		<choose>
+			<!-- MySQL 语法 -->
+			<when test="_databaseId == 'mysql'">
+				SELECT t.id
+				FROM xxl_job_registry AS t
+				WHERE t.update_time &lt; DATE_ADD(#{nowTime}, INTERVAL -#{timeout} SECOND)
+			</when>
+			<!-- 高斯(GaussDB) 语法 -->
+			<when test="_databaseId == 'postgresql'">
+				SELECT t.id
+				FROM xxl_job_registry AS t
+				WHERE t.update_time &lt; NOW() - (#{timeout} || ' SECOND')::INTERVAL
+			</when>
+			<!-- 达梦(DM) 语法 -->
+			<when test="_databaseId == 'dm'">
+				SELECT t.id
+				FROM xxl_job_registry AS t
+				WHERE t.update_time &lt; DATEADD(SECOND, -#{timeout}, #{nowTime})
+			</when>
+		</choose>
 	</select>
-	
+
 	<delete id="removeDead" parameterType="java.lang.Integer" >
 		DELETE FROM xxl_job_registry
 		WHERE id in
@@ -34,21 +51,38 @@
 	</delete>
 
 	<select id="findAll" parameterType="java.util.HashMap" resultMap="XxlJobRegistry">
-		SELECT <include refid="Base_Column_List" />
-		FROM xxl_job_registry AS t
-		WHERE t.update_time <![CDATA[ > ]]> DATE_ADD(#{nowTime},INTERVAL -#{timeout} SECOND)
+		<choose>
+			<!-- MySQL 语法 -->
+			<when test="_databaseId == 'mysql'">
+				SELECT <include refid="Base_Column_List" />
+				FROM xxl_job_registry AS t
+				WHERE t.update_time &lt; DATE_ADD(#{nowTime}, INTERVAL -#{timeout} SECOND)
+			</when>
+			<!-- 高斯(GaussDB) 语法 -->
+			<when test="_databaseId == 'postgresql'">
+				SELECT <include refid="Base_Column_List" />
+				FROM xxl_job_registry AS t
+				WHERE t.update_time &lt; NOW() - (#{timeout} || ' SECOND')::INTERVAL
+			</when>
+			<!-- 达梦(DM) 语法 -->
+			<when test="_databaseId == 'dm'">
+				SELECT <include refid="Base_Column_List" />
+				FROM xxl_job_registry AS t
+				WHERE t.update_time &lt; DATEADD(SECOND, -#{timeout}, #{nowTime})
+			</when>
+		</choose>
 	</select>
 
     <update id="registryUpdate" >
         UPDATE xxl_job_registry
-        SET `update_time` = #{updateTime}
-        WHERE `registry_group` = #{registryGroup}
-          AND `registry_key` = #{registryKey}
-          AND `registry_value` = #{registryValue}
+        SET update_time = #{updateTime}
+        WHERE registry_group = #{registryGroup}
+          AND registry_key = #{registryKey}
+          AND registry_value = #{registryValue}
     </update>
 
     <insert id="registrySave" >
-        INSERT INTO xxl_job_registry( `registry_group` , `registry_key` , `registry_value`, `update_time`)
+        INSERT INTO xxl_job_registry( registry_group , registry_key , registry_value, update_time)
         VALUES( #{registryGroup}  , #{registryKey} , #{registryValue}, #{updateTime})
     </insert>
 
