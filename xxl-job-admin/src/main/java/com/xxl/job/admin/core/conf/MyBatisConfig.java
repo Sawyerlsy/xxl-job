@@ -31,7 +31,7 @@ public class MyBatisConfig {
         properties.put("DB2", "db2");
         properties.put("MariaDB", "mariadb");
         // 国产数据库
-        properties.put("DM Database Server", "dm");       // 达梦
+        properties.put("DM DBMS", "dm");    // 达梦
         properties.put("KingbaseES", "kingbase");        // 人大金仓
         //properties.put("GaussDB", "gaussdb");            // 华为高斯,实际使用的是postgresql
         properties.put("OceanBase", "oceanbase");        // 蚂蚁OceanBase

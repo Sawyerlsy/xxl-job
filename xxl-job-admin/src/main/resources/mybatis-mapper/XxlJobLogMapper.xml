@@ -228,45 +228,15 @@
 	</delete>
 
 	<select id="findFailJobLogIds" resultType="long">
-		<choose>
-			<!-- MySQL 语法 -->
-			<when test="_databaseId == 'mysql'">
-				SELECT id FROM xxl_job_log
-				WHERE NOT (
-				(trigger_code IN (0, 200) AND handle_code = 0)
+		SELECT id FROM xxl_job_log
+		WHERE NOT (
+			(trigger_code IN (0, 200) AND handle_code = 0)
 				OR
-				(handle_code = 200)
-				)
-				AND alarm_status = 0
-				ORDER BY id ASC
-				LIMIT #{pagesize}
-			</when>
-			<!-- 高斯(GaussDB) 语法 -->
-			<when test="_databaseId == 'postgresql'">
-				SELECT id FROM xxl_job_log
-				WHERE NOT (
-				(trigger_code IN (0, 200) AND handle_code = 0)
-				OR
-				(handle_code = 200)
-				)
-				AND alarm_status = 0
-				ORDER BY id ASC
-				LIMIT #{pagesize}
-			</when>
-			<!-- 达梦(DM) 语法 -->
-			<when test="_databaseId == 'dm'">
-				SELECT * FROM (
-				SELECT id, ROWNUM AS rn FROM xxl_job_log
-				WHERE NOT (
-				(trigger_code IN (0, 200) AND handle_code = 0)
-				OR
-				(handle_code = 200)
-				)
-				AND alarm_status = 0
-				ORDER BY id ASC
-				) WHERE rn &lt;= #{pagesize}
-			</when>
-		</choose>
+			(handle_code = 200)
+			)
+		  AND alarm_status = 0
+		ORDER BY id ASC
+		LIMIT #{pagesize}
 	</select>
 
 	<update id="updateAlarmStatus" >
