@@ -1,5 +1,5 @@
 FROM openjdk:8-jre-slim
-MAINTAINER Sawyerlsy
+LABEL maintainer="Sawyerlsy <sawyerlsy@126.com>"
 
 ENV PARAMS=""
 
