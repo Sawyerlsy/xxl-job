@@ -56,19 +56,19 @@
 			<when test="_databaseId == 'mysql'">
 				SELECT <include refid="Base_Column_List" />
 				FROM xxl_job_registry AS t
-				WHERE t.update_time &lt; DATE_ADD(#{nowTime}, INTERVAL -#{timeout} SECOND)
+				WHERE t.update_time > DATE_ADD(#{nowTime}, INTERVAL -#{timeout} SECOND)
 			</when>
 			<!-- 高斯(GaussDB) 语法 -->
 			<when test="_databaseId == 'postgresql'">
 				SELECT <include refid="Base_Column_List" />
 				FROM xxl_job_registry AS t
-				WHERE t.update_time &lt; NOW() - (#{timeout} || ' SECOND')::INTERVAL
+				WHERE t.update_time > NOW() - (#{timeout} || ' SECOND')::INTERVAL
 			</when>
 			<!-- 达梦(DM) 语法 -->
 			<when test="_databaseId == 'dm'">
 				SELECT <include refid="Base_Column_List" />
 				FROM xxl_job_registry AS t
-				WHERE t.update_time &lt; DATEADD(SECOND, -#{timeout}, #{nowTime})
+				WHERE t.update_time > DATEADD(SECOND, -#{timeout}, #{nowTime})
 			</when>
 		</choose>
 	</select>
