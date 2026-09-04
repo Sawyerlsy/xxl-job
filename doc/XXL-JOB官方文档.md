@@ -1391,6 +1391,7 @@ XXL-JOB是一个跨语言的任务调度平台，主要体现在如下几个方�
 可以通过以下命令快速构建调度中心，并启动运行；
 ```
 mvn clean package
+docker buildx build --platform linux/amd64,linux/arm64 -t sawyerlsy/xxl-job-admin:v2.3.1-local --push ./xxl-job-admin
 docker build -t xuxueli/xxl-job-admin ./xxl-job-admin
 docker run --name xxl-job-admin -p 8080:8080 -d xuxueli/xxl-job-admin
 ```
