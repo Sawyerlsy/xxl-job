@@ -86,6 +86,13 @@
 			<version>${project.parent.version}</version>
 		</dependency>
 
+		<!-- jasypt加密工具类 -->
+		<dependency>
+			<groupId>com.github.ulisesbocchio</groupId>
+			<artifactId>jasypt-spring-boot-starter</artifactId>
+			<version>${jasypt.version}</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
